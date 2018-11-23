@@ -1,0 +1,19 @@
+{{>licenseInfo}}
+{{#models}}
+{{#model}}
+import { ValidatorFn, Validators } from '@angular/forms';
+
+{{#tsImports}}
+import { {{classname}} } from './{{filename}}';
+{{/tsImports}}
+import { BaseFormControlFactory } from 'src/base-form-control-factory';
+
+
+{{#description}}
+/**
+ * {{{description}}}
+ */
+{{/description}}
+{{#isEnum}}{{>modelEnum}}{{/isEnum}}{{^isEnum}}{{#isAlias}}{{>modelAlias}}{{/isAlias}}{{^isAlias}}{{#taggedUnions}}{{>modelTaggedUnion}}{{/taggedUnions}}{{^taggedUnions}}{{>modelGeneric}}{{/taggedUnions}}{{/isAlias}}{{/isEnum}}
+{{/model}}
+{{/models}}

@@ -1,0 +1,22 @@
+{
+  "name": "openapi-typescript-angular-generator",
+  "version": "1.0.0",
+  "description": "Code generator to generate angular-specific typescript (model/service/validator) from an openapi-specification.",
+  "bin": "./bin/ng-ts-codegen.js",
+  "dependencies": {
+    "@angular/common": "^7.0.0",
+    "@angular/core": "^7.0.0",
+    "@angular/forms": "^7.0.0",
+    "rxjs": "~6.3.3"
+  },
+  "keywords": [
+    "openapi",
+    "typescript",
+    "angular"
+  ],
+  "contributors": [
+    "André Jähnig",
+    "Stefan Schubert"
+  ],
+  "license": "MIT"
+}

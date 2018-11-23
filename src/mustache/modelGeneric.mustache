@@ -1,0 +1,44 @@
+export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{ {{>modelGenericAdditionalProperties}}
+{{#vars}}
+    {{#description}}
+    /**
+     * {{{description}}}
+     */
+    {{/description}}
+    {{#isReadOnly}}readonly {{/isReadOnly}}{{{name}}}{{^required}}?{{/required}}: {{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}};
+{{/vars}}
+}
+
+export const {{classname}}Validators: {[K in keyof {{classname}}]: Array<ValidatorFn>} = {
+{{#vars}}
+    {{name}}: [
+        {{#required}}
+            Validators.required,
+            {{/required}}
+            {{#hasValidation}}
+            {{#minimum}}
+            Validators.min({{minimum}}),
+            {{/minimum}}
+            {{#maximum}}
+            Validators.max({{maximum}}),
+            {{/maximum}}
+            {{#minLength}}
+            Validators.minLength({{minLength}}),
+            {{/minLength}}
+            {{#maxLength}}
+            Validators.maxLength({{maxLength}}),
+            {{/maxLength}}
+            {{#pattern}}
+            Validators.pattern({{pattern}}),
+            {{/pattern}}
+            {{/hasValidation}}
+    ],
+{{/vars}}
+}
+
+export class {{classname}}FormControlFactory extends BaseFormControlFactory<{{classname}}> {
+    constructor(model: {{classname}}) {
+        super(model, {{classname}}Validators);
+    }
+}
+{{>modelGenericEnums}}
