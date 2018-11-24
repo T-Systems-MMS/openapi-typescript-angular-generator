@@ -11,9 +11,14 @@ if (argv.help || argv.h) {
 }
 
 const args = process.argv.slice(2);
-
-let command = 'java -jar ' + resolve(__dirname, 'openapi-generator.jar') + ' generate -g=typescript-angular -t=src/mustache --additional-properties="ngVersion=7.0.0" --additional-properties="supportsES6=true"';
-
+let command;
+if (argv.e === 'docker') {
+    command = 'docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli';
+} else {
+    // default to java
+    command = 'java -jar ' + resolve(__dirname, 'openapi-generator.jar');
+}
+command += ' generate -g=typescript-angular -t=src/mustache --additional-properties="ngVersion=7.0.0" --additional-properties="supportsES6=true"';
 if (args) {
     command += ` ${args.join(' ')}`;
 }
