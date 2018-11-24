@@ -6,4 +6,11 @@ It's based on the [OpenAPI Generator](https://github.com/OpenAPITools/openapi-ge
 
 ## Usage
 
-tbd
+Install it with `npm install openapi-typescript-angular-generator`.
+
+Run it with `npx openapi-typescript-angular-generator` and following options:
+* `-i` file or URL of the openapi-specification
+* `-o` output destination for the generated code
+* `-e` (optional) building environment: java (default) or docker
+
+`Docker` or `Java` must be installed for the generator to work.

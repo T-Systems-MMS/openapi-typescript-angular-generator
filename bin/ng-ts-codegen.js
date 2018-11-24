@@ -1,7 +1,14 @@
 #!/usr/bin/env node
 
+const argv = require('yargs').argv;
 const {exec} = require('child_process');
 const {resolve} = require('path');
+
+if (argv.help || argv.h) {
+    console.log('[Usage]');
+    console.log('openapi-typescript-angular-generator -i <openapi-spec> -o <output-destination> [-e <java|docker>]');
+    process.exit(0);
+}
 
 const args = process.argv.slice(2);
 
