@@ -1,4 +1,5 @@
-export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{ {{>modelGenericAdditionalProperties}}
+export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{
+{{>modelGenericAdditionalProperties}}
 {{#vars}}
     {{#description}}
     /**
@@ -9,6 +10,9 @@ export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{ {{>m
 {{/vars}}
 }
 
+/**
+ * A map of `ValidatorFn` for each property of {{classname}}.
+ */
 export const {{classname}}Validators: {[K in keyof {{classname}}]: Array<ValidatorFn>} = {
 {{#vars}}
     {{name}}: [
@@ -34,8 +38,11 @@ export const {{classname}}Validators: {[K in keyof {{classname}}]: Array<Validat
             {{/hasValidation}}
     ],
 {{/vars}}
-}
+};
 
+/**
+ * The FormControlFactory for {{classname}}.
+ */
 export class {{classname}}FormControlFactory extends BaseFormControlFactory<{{classname}}> {
     constructor(model: {{classname}}) {
         super(model, {{classname}}Validators);
