@@ -1,3 +1,8 @@
+/*
+ * Copyright(c) 1995 - 2018 T-Systems Multimedia Solutions GmbH
+ * Riesaer Str. 5, 01129 Dresden
+ * All rights reserved.
+ */
 import { ValidatorFn, FormControl, AsyncValidatorFn } from '@angular/forms';
 
 /**
@@ -35,7 +40,7 @@ export class BaseFormControlFactory<T> {
    * Creates a new `FormControl` instance.
    *
    * @param property the property of the model for which the `FormControl` should be created.
-   * 
+   *
    * @param asyncValidator A single async validator or array of async validator functions.
    */
   createFormControl(property: keyof T, asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null): FormControl {

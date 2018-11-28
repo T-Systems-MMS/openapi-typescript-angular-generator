@@ -1,0 +1,12 @@
+{
+  "copyright": {
+    "prefix": "copyright",
+    "body": [
+      "/*",
+      " * Copyright(c) 1995 - $CURRENT_YEAR T-Systems Multimedia Solutions GmbH",
+      " * Riesaer Str. 5, 01129 Dresden",
+      " * All rights reserved.",
+      " */"
+    ]
+  }
+}

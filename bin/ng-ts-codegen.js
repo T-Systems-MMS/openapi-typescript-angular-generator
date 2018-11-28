@@ -1,4 +1,11 @@
 #!/usr/bin/env node
+
+/*
+ * Copyright(c) 1995 - 2018 T-Systems Multimedia Solutions GmbH
+ * Riesaer Str. 5, 01129 Dresden
+ * All rights reserved.
+ */
+
 const argv = require('yargs').argv;
 const fse = require('fs-extra');
 const { exec } = require('child_process');
