@@ -55,11 +55,17 @@ function getProxyArgsForDocker() {
   return proxyArgs;
 }
 
+function addAdditionalProperty(additionalProperties, arg) {
+  if (typeof arg !== 'string') { return; }
+  const addArg = arg.split('=', 2);
+  additionalProperties[addArg[0]] = addArg[1];
+}
+
 // Usage
 if (argv.help || argv.h) {
   console.log('[Usage]');
   console.log(
-    'openapi-typescript-angular-generator -i <openapi-spec> -o <output-destination> [-e <java|docker>] [-m <docker-mount>] [-a <authorization>]'
+    'openapi-typescript-angular-generator -i <openapi-spec> -o <output-destination> [-e <java|docker>] [-m <docker-mount>] [-a <authorization>] [--additional-properties <additional properties>...]'
   );
   process.exit(0);
 }
@@ -97,18 +103,37 @@ const args = [
   `-o ${isDocker ? `/local/${argv.o}` : argv.o}`,
   '-g=typescript-angular',
   `-t=${
-    isDocker
-      ? '/local/node_modules/openapi-typescript-angular-generator/src/mustache'
-      : resolve(__dirname, '../src/mustache')
+  isDocker
+    ? '/local/node_modules/openapi-typescript-angular-generator/src/mustache'
+    : resolve(__dirname, '../src/mustache')
   }`,
-  '--additional-properties="supportsES6=true"',
-  '--additional-properties="ngVersion=7.0.0"',
-  '--additional-properties="modelPropertyNaming=original"',
 ];
 
 // add auth headers
 if (argv.a) {
   args.push(`-a ${argv.a}`);
+}
+
+// additional properties
+let additionalProperties = {
+  supportsES6: 'true',
+  ngVersion: '7.0.0',
+  modelPropertyNaming: 'original',
+};
+if (argv['additional-properties']) {
+  if (Array.isArray(argv['additional-properties'])) {
+    argv['additional-properties'].forEach(arg => {
+      addAdditionalProperty(additionalProperties, arg);
+    });
+  } else {
+    addAdditionalProperty(additionalProperties, argv['additional-properties']);
+  }
+}
+for (const key in additionalProperties) {
+  if (additionalProperties.hasOwnProperty(key)) {
+    const element = additionalProperties[key];
+    args.push(`--additional-properties="${key}=${element}"`);
+  }
 }
 
 // build command
