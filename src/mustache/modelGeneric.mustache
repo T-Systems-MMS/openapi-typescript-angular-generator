@@ -16,7 +16,7 @@ export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{
 /**
  * A map of `ValidatorFn` for each property of {{classname}}.
  */
-export const {{classname}}Validators: {[K in keyof {{classname}}]: Array<ValidatorFn>} = {
+export const {{classname}}Validators: {[K in keyof {{classname}}]?: Array<ValidatorFn>} = {
 {{#vars}}
     {{name}}: [
         {{#required}}

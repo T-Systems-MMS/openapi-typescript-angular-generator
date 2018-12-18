@@ -21,7 +21,7 @@ export class BaseFormControlFactory<T> {
    *
    * @param validators An array of validators.
    */
-  constructor(model: T, validators: { [K in keyof T]: Array<ValidatorFn> }) {
+  constructor(model: T, validators: { [K in keyof T]?: Array<ValidatorFn> }) {
     this.map = new Map();
 
     for (const property in model) {
@@ -31,7 +31,7 @@ export class BaseFormControlFactory<T> {
 
       this.map.set(property, {
         value: model[property],
-        validators: validators[property],
+        validators: validators[property] ? validators[property] : [],
       });
     }
   }
