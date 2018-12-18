@@ -46,7 +46,7 @@ if (process.env.HTTP_PROXY) {
   proxyArgs = proxyArgs.concat(` -Dhttp.proxyHost=${parsedUrl.hostname} -Dhttp.proxyPort=${parsedUrl.port}`);
 }
 if (process.env.HTTPS_PROXY) {
-  const parsedUrl = url.parse(process.env.HTTP_PROXY);
+  const parsedUrl = url.parse(process.env.HTTPS_PROXY);
   proxyArgs = proxyArgs.concat(` -Dhttps.proxyHost=${parsedUrl.hostname} -Dhttps.proxyPort=${parsedUrl.port}`);
 }
 if (process.env.NO_PROXY) {
