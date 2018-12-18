@@ -4,12 +4,10 @@
 {{>licenseInfo}}
 {{#models}}
 {{#model}}
-import { ValidatorFn, Validators } from '@angular/forms';
-
+{{>modelValidatorImports}}
 {{#tsImports}}
 import { {{classname}} } from './{{filename}}';
 {{/tsImports}}
-import { BaseFormControlFactory } from './base-form-control-factory';
 
 
 {{#description}}
