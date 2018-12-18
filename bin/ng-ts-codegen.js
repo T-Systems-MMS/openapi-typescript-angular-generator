@@ -11,6 +11,8 @@ const fse = require('fs-extra');
 const { exec } = require('child_process');
 const { resolve } = require('path');
 
+const JAR_NAME = 'openapi-generator-cli-3.3.4.jar';
+
 // Usage
 if (argv.help || argv.h) {
   console.log('[Usage]');
@@ -40,7 +42,7 @@ if (argv.e === 'docker') {
   isDocker = true;
 } else {
   // default to java
-  command = 'java -jar ' + resolve(__dirname, 'openapi-generator-3.3.3.jar');
+  command = 'java -jar ' + resolve(__dirname, JAR_NAME);
 }
 
 // join parameters to the command
