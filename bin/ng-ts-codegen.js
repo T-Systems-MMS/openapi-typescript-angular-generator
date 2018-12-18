@@ -11,7 +11,9 @@ const fse = require('fs-extra');
 const { exec } = require('child_process');
 const { resolve } = require('path');
 
-const JAR_NAME = 'openapi-generator-cli-3.3.4.jar';
+const openApiVersion = '3.3.4';
+const jarFileName = `openapi-generator-cli-${openApiVersion}.jar`;
+const dockerImageName = `openapitools/openapi-generator-cli:v${openApiVersion}`;
 
 // Usage
 if (argv.help || argv.h) {
@@ -38,11 +40,11 @@ let command;
 let isDocker = false;
 if (argv.e === 'docker') {
   const volume = argv.m || process.env.PWD;
-  command = `docker run --rm -v ${volume}:/local openapitools/openapi-generator-cli`;
+  command = `docker run --rm -v ${volume}:/local ${dockerImageName}`;
   isDocker = true;
 } else {
   // default to java
-  command = 'java -jar ' + resolve(__dirname, JAR_NAME);
+  command = 'java -jar ' + resolve(__dirname, jarFileName);
 }
 
 // join parameters to the command
