@@ -14,11 +14,15 @@ Run it with `npx openapi-typescript-angular-generator` and following options:
 - `-o` output destination for the generated code
 - `-e` (optional) building environment: java (default) or docker
 - `-m` (optional) mount root for the docker container
-- `-a` (optional) add authorization headers
+- `-a` (optional) adds authorization headers when fetching the OpenAPI definitions
+  remotely. Pass in a URL-encoded string of name:header with a comma
+  separating multiple values
 
 `Docker` or `Java` must be installed for the generator to work.
 
-Pay attention to the input/output-parameter when using docker. These parameters will be used after the docker container is started and the volumne is mounted. So any path-resolution will be start from `/local`.
+Pay attention to the input/output-parameter when using docker. These parameters will be used after the docker container is started and the volumne is mounted. So any path-resolution, except the input-parameter is an url, will be start from `/local`.
+
+Proxy settings from the executed process will be applied to the openapi-generator-process.
 
 ## License
 
