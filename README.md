@@ -14,6 +14,7 @@ Run it with `npx openapi-typescript-angular-generator` and following options:
 - `-o` output destination for the generated code
 - `-e` (optional) building environment: java (default) or docker
 - `-m` (optional) mount root for the docker container
+- `-a` (optional) add authorization headers
 
 `Docker` or `Java` must be installed for the generator to work.
 
