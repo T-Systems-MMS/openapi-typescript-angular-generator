@@ -10,16 +10,56 @@ const argv = require('yargs').argv;
 const fse = require('fs-extra');
 const { exec } = require('child_process');
 const { resolve } = require('path');
+const url = require('url');
 
 const openApiVersion = '3.3.4';
 const jarFileName = `openapi-generator-cli-${openApiVersion}.jar`;
 const dockerImageName = `openapitools/openapi-generator-cli:v${openApiVersion}`;
 
+/**
+ * Converts proxy settings into java runtime parameters.
+ */
+function getProxyArgsForJava() {
+  let proxyArgs = '';
+  if (process.env.HTTP_PROXY) {
+    const parsedUrl = url.parse(process.env.HTTP_PROXY);
+    proxyArgs = proxyArgs.concat(` -Dhttp.proxyHost=${parsedUrl.hostname} -Dhttp.proxyPort=${parsedUrl.port}`);
+  }
+  if (process.env.HTTPS_PROXY) {
+    const parsedUrl = url.parse(process.env.HTTPS_PROXY);
+    proxyArgs = proxyArgs.concat(` -Dhttps.proxyHost=${parsedUrl.hostname} -Dhttps.proxyPort=${parsedUrl.port}`);
+  }
+  if (process.env.NO_PROXY) {
+    const noProxyValue = process.env.NO_PROXY.split(',').join('|');
+    proxyArgs = proxyArgs.concat(` -Dhttp.nonProxyHosts="${noProxyValue}" -Dhttps.nonProxyHosts="${noProxyValue}"`);
+  }
+
+  return proxyArgs;
+}
+
+/**
+ * Converts proxy settings into docker run parameters.
+ */
+function getProxyArgsForDocker() {
+  let proxyArgs = '';
+  if (process.env.HTTP_PROXY) {
+    proxyArgs = proxyArgs.concat(` --env HTTP_PROXY="${process.env.HTTP_PROXY}"`);
+  }
+  if (process.env.HTTPS_PROXY) {
+    proxyArgs = proxyArgs.concat(` --env HTTPS_PROXY="${process.env.HTTPS_PROXY}"`);
+  }
+  if (process.env.NO_PROXY) {
+    proxyArgs = proxyArgs.concat(` --env NO_PROXY="${process.env.NO_PROXY}"`);
+  }
+
+  return proxyArgs;
+}
+
 // Usage
 if (argv.help || argv.h) {
   console.log('[Usage]');
   console.log(
-    'openapi-typescript-angular-generator -i <openapi-spec> -o <output-destination> [-e <java|docker>] [-m <docker-mount>]'
+    'openapi-typescript-angular-generator -i <openapi-spec> -o <output-destination> [-e <java|docker>] [-m <docker-mount>] [-a <authorization>]'
   );
   process.exit(0);
 }
@@ -39,18 +79,21 @@ if (!argv.o) {
 let command;
 let isDocker = false;
 if (argv.e === 'docker') {
+  const proxyArgs = getProxyArgsForDocker();
   const volume = argv.m || process.env.PWD;
-  command = `docker run --rm -v ${volume}:/local ${dockerImageName}`;
+  command = `docker run${proxyArgs} --rm -v ${volume}:/local ${dockerImageName}`;
   isDocker = true;
 } else {
   // default to java
-  command = 'java -jar ' + resolve(__dirname, jarFileName);
+  const proxyArgs = getProxyArgsForJava();
+  command = `java${proxyArgs} -jar ${resolve(__dirname, jarFileName)}`;
 }
 
 // join parameters to the command
+const isUrlInput = argv.i.startsWith('http://') || argv.i.startsWith('https://');
 const args = [
   'generate',
-  `-i ${isDocker ? `/local/${argv.i}` : argv.i}`,
+  `-i ${isDocker && !isUrlInput ? `/local/${argv.i}` : argv.i}`,
   `-o ${isDocker ? `/local/${argv.o}` : argv.o}`,
   '-g=typescript-angular',
   `-t=${
@@ -60,7 +103,15 @@ const args = [
   }`,
   '--additional-properties="supportsES6=true"',
   '--additional-properties="ngVersion=7.0.0"',
+  '--additional-properties="modelPropertyNaming=original"',
 ];
+
+// add auth headers
+if (argv.a) {
+  args.push(`-a ${argv.a}`);
+}
+
+// build command
 command += ` ${args.join(' ')}`;
 
 // execute
