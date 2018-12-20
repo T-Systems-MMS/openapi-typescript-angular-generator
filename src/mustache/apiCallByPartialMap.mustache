@@ -1,0 +1,35 @@
+{{! Copyright(c) 1995 - 2018 T-Systems Multimedia Solutions GmbH }}
+{{! Riesaer Str. 5, 01129 Dresden }}
+{{! All rights reserved. }}
+{{#useHttpClient}}
+
+  /**
+   * {{summary}} by map.
+   * {{notes}}
+   * @param map parameters map to set partial amount of parameters easily
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public {{nickname}}ByMap(
+    map: Partial{{nickname}}ParamMap,
+    observe?: 'body',
+    reportProgress?: boolean): Observable<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>;
+  public {{nickname}}ByMap(
+    map: Partial{{nickname}}ParamMap,
+    observe?: 'response',
+    reportProgress?: boolean): Observable<HttpResponse<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>>;
+  public {{nickname}}ByMap(
+    map: Partial{{nickname}}ParamMap,
+    observe?: 'events',
+    reportProgress?: boolean): Observable<HttpEvent<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>>;
+  public {{nickname}}ByMap(
+    map: Partial{{nickname}}ParamMap,
+    observe: any = 'body',
+    reportProgress: boolean = false): Observable<any> {
+    return this.{{nickname}}({{#allParams}}
+      map.{{paramName}},{{/allParams}}
+      observe,
+      reportProgress
+    );
+  }
+{{/useHttpClient}}

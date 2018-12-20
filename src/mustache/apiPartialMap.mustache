@@ -1,0 +1,13 @@
+{{! Copyright(c) 1995 - 2018 T-Systems Multimedia Solutions GmbH }}
+{{! Riesaer Str. 5, 01129 Dresden }}
+{{! All rights reserved. }}
+{{#operation}}
+/**
+ * Parameter map for {{nickname}}.
+ */
+export interface Partial{{nickname}}ParamMap {
+{{#allParams}}
+  {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};
+{{/allParams}}
+}
+{{/operation}}

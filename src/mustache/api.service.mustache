@@ -38,17 +38,7 @@ import { {{classname}}Interface }                            from './{{classFile
 {{/withInterfaces}}
 
 {{#operations}}
-{{#operation}}
-
-/**
- * Parameter map for {{nickname}}.
- */
-export interface Partial{{nickname}}ParamMap {
-{{#allParams}}
-  {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};
-{{/allParams}}
-}
-{{/operation}}
+{{>apiPartialMap}}
 
 {{#description}}
 /**
@@ -131,38 +121,7 @@ export class {{classname}} {
 {{/useHttpClient}}
 
 {{#operation}}
-{{#useHttpClient}}
-
-  /**
-   * {{summary}} by map.
-   * {{notes}}
-   * @param map parameters map to set partial amount of parameters easily
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public {{nickname}}ByMap(
-    map: Partial{{nickname}}ParamMap,
-    observe?: 'body',
-    reportProgress?: boolean): Observable<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>;
-  public {{nickname}}ByMap(
-    map: Partial{{nickname}}ParamMap,
-    observe?: 'response',
-    reportProgress?: boolean): Observable<HttpResponse<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>>;
-  public {{nickname}}ByMap(
-    map: Partial{{nickname}}ParamMap,
-    observe?: 'events',
-    reportProgress?: boolean): Observable<HttpEvent<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>>;
-  public {{nickname}}ByMap(
-    map: Partial{{nickname}}ParamMap,
-    observe: any = 'body',
-    reportProgress: boolean = false): Observable<any> {
-    return this.{{nickname}}({{#allParams}}
-      map.{{paramName}},{{/allParams}}
-      observe,
-      reportProgress
-    );
-  }
-{{/useHttpClient}}
+{{>apiCallByPartialMap}}
 
     /**
      * {{summary}}
