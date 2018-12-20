@@ -17,6 +17,7 @@ Run it with `npx openapi-typescript-angular-generator` and following options:
 - `-a` (optional) adds authorization headers when fetching the OpenAPI definitions
   remotely. Pass in a URL-encoded string of name:header with a comma
   separating multiple values
+- `--additional-properties` (optional) additional properties to pass to openapi-generator
 
 `Docker` or `Java` must be installed for the generator to work.
 
