@@ -55,8 +55,15 @@ function getProxyArgsForDocker() {
   return proxyArgs;
 }
 
+/**
+ * Adds the new given additional property to the given map of additional properties.
+ * @param {Object} additionalProperties map of additional properties
+ * @param {string} arg additional property to add
+ */
 function addAdditionalProperty(additionalProperties, arg) {
-  if (typeof arg !== 'string') { return; }
+  if (typeof arg !== 'string') {
+    return;
+  }
   const addArg = arg.split('=', 2);
   additionalProperties[addArg[0]] = addArg[1];
 }
@@ -103,9 +110,9 @@ const args = [
   `-o ${isDocker ? `/local/${argv.o}` : argv.o}`,
   '-g=typescript-angular',
   `-t=${
-  isDocker
-    ? '/local/node_modules/openapi-typescript-angular-generator/src/mustache'
-    : resolve(__dirname, '../src/mustache')
+    isDocker
+      ? '/local/node_modules/openapi-typescript-angular-generator/src/mustache'
+      : resolve(__dirname, '../src/mustache')
   }`,
 ];
 
@@ -115,7 +122,7 @@ if (argv.a) {
 }
 
 // additional properties
-let additionalProperties = {
+const additionalProperties = {
   supportsES6: 'true',
   ngVersion: '7.0.0',
   modelPropertyNaming: 'original',
