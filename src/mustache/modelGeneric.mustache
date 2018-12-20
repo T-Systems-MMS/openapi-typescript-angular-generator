@@ -1,8 +1,7 @@
 {{! Copyright(c) 1995 - 2018 T-Systems Multimedia Solutions GmbH }}
 {{! Riesaer Str. 5, 01129 Dresden }}
 {{! All rights reserved. }}
-export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{
-{{>modelGenericAdditionalProperties}}
+export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{ {{>modelGenericAdditionalProperties}}
 {{#vars}}
     {{#description}}
     /**
@@ -11,44 +10,6 @@ export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{
     {{/description}}
     {{#isReadOnly}}readonly {{/isReadOnly}}{{{name}}}{{^required}}?{{/required}}: {{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}};
 {{/vars}}
-}
+}{{>modelGenericEnums}}
 
-/**
- * A map of `ValidatorFn` for each property of {{classname}}.
- */
-export const {{classname}}Validators: {[K in keyof {{classname}}]?: Array<ValidatorFn>} = {
-{{#vars}}
-    {{name}}: [
-        {{#required}}
-            Validators.required,
-            {{/required}}
-            {{#hasValidation}}
-            {{#minimum}}
-            Validators.min({{minimum}}),
-            {{/minimum}}
-            {{#maximum}}
-            Validators.max({{maximum}}),
-            {{/maximum}}
-            {{#minLength}}
-            Validators.minLength({{minLength}}),
-            {{/minLength}}
-            {{#maxLength}}
-            Validators.maxLength({{maxLength}}),
-            {{/maxLength}}
-            {{#pattern}}
-            Validators.pattern({{pattern}}),
-            {{/pattern}}
-            {{/hasValidation}}
-    ],
-{{/vars}}
-};
-
-/**
- * The FormControlFactory for {{classname}}.
- */
-export class {{classname}}FormControlFactory extends BaseFormControlFactory<{{classname}}> {
-    constructor(model: {{classname}}) {
-        super(model, {{classname}}Validators);
-    }
-}
-{{>modelGenericEnums}}
+{{>modelGenericValidators}}
