@@ -1,0 +1,31 @@
+{{! Copyright(c) 1995 - 2018 T-Systems Multimedia Solutions GmbH }}
+{{! Riesaer Str. 5, 01129 Dresden }}
+{{! All rights reserved. }}
+/**
+ * Namespace for property- and property-value-enumerations of {{{classname}}}.
+ */
+export namespace {{classname}} {
+    /**
+     * All properties of {{{classname}}}.
+     */
+    export enum Properties {
+    {{#vars}}
+        {{name}} = '{{name}}'{{^-last}},{{/-last}}
+    {{/vars}}
+    }
+{{#vars}}
+    {{#isEnum}}
+
+    /**
+     * All possible values of {{{name}}}.
+     */
+    export enum {{enumName}} {
+    {{#allowableValues}}
+    {{#enumVars}}
+        {{name}} = {{{value}}}{{^-last}},{{/-last}}
+    {{/enumVars}}
+    {{/allowableValues}}
+    }
+    {{/isEnum}}
+{{/vars}}
+}
