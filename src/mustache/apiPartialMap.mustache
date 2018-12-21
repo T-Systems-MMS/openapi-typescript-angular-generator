@@ -3,12 +3,29 @@
 {{! All rights reserved. }}
 {{#operation}}
 /**
- * Parameter map for {{nickname}}.
+ * Namespace for {{nickname}}.
  */
-export interface Partial{{nickname}}ParamMap {
-{{#allParams}}
-  /** {{description}} */
-  {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};
-{{/allParams}}
+export namespace {{operationIdCamelCase}} {
+    /**
+     * Parameter map for {{nickname}}.
+     */
+    export interface PartialParamMap {
+    {{#allParams}}
+      /**
+       * {{{description}}}
+       */
+      {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};
+    {{/allParams}}
+    }
+
+    /**
+     * Enumeration of all parameters for {{nickname}}.
+     */
+    export enum Parameters {
+    {{#allParams}}
+        {{paramName}} = '{{paramName}}'{{^-last}},{{/-last}}
+    {{/allParams}}
+    }
 }
+
 {{/operation}}

@@ -11,19 +11,19 @@
    * @param reportProgress flag to report request and response progress.
    */
   public {{nickname}}ByMap(
-    map: Partial{{nickname}}ParamMap,
+    map: {{operationIdCamelCase}}.PartialParamMap,
     observe?: 'body',
     reportProgress?: boolean): Observable<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>;
   public {{nickname}}ByMap(
-    map: Partial{{nickname}}ParamMap,
+    map: {{operationIdCamelCase}}.PartialParamMap,
     observe?: 'response',
     reportProgress?: boolean): Observable<HttpResponse<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>>;
   public {{nickname}}ByMap(
-    map: Partial{{nickname}}ParamMap,
+    map: {{operationIdCamelCase}}.PartialParamMap,
     observe?: 'events',
     reportProgress?: boolean): Observable<HttpEvent<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>>;
   public {{nickname}}ByMap(
-    map: Partial{{nickname}}ParamMap,
+    map: {{operationIdCamelCase}}.PartialParamMap,
     observe: any = 'body',
     reportProgress: boolean = false): Observable<any> {
     return this.{{nickname}}({{#allParams}}
