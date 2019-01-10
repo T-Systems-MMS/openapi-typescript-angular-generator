@@ -10,6 +10,11 @@ export namespace {{classname}} {
      */
     export enum Properties {
     {{#vars}}
+        {{#description}}
+        /**
+         * {{{description}}}
+         */
+        {{/description}}
         {{name}} = '{{name}}'{{^-last}},{{/-last}}
     {{/vars}}
     }
