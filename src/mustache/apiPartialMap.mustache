@@ -25,6 +25,11 @@ export namespace {{operationIdCamelCase}} {
      */
     export enum Parameters {
     {{#allParams}}
+      {{#description}}
+      /**
+       * {{{description}}}
+       */
+      {{/description}}
       {{paramName}} = '{{paramName}}'{{^-last}},{{/-last}}
     {{/allParams}}
     }
