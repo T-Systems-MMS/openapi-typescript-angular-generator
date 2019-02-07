@@ -6,7 +6,9 @@ It's based on the [OpenAPI Generator](https://github.com/OpenAPITools/openapi-ge
 
 ## Usage
 
-Install it with `npm install openapi-typescript-angular-generator`.
+Install it with `npm install --save openapi-typescript-angular-generator`.
+
+### Code Generation
 
 Run it with `npx openapi-typescript-angular-generator` and following options:
 
@@ -24,6 +26,51 @@ Run it with `npx openapi-typescript-angular-generator` and following options:
 Pay attention to the input/output-parameter when using docker. These parameters will be used after the docker container is started and the volumne is mounted. So any path-resolution, except the input-parameter is an url, will be start from `/local`.
 
 Proxy settings from the executed process will be applied to the openapi-generator-process.
+
+### Usage of custom `FormGroup` and `FormControl` with `FormControl`-factories
+
+For each model is a `FormControl`-factory generated. This factory can be used to create `FormControl`-instances:
+
+```
+// generate model
+interface MyModel {
+  value: string;
+}
+namespace MyModel {
+  export enum Properties {
+    value = 'value',
+  }
+}
+
+// model fetch from service
+this.model: MyModel = { value: 'foobar' };
+this.properties = MyModel.Properties;
+this.errorMap = {
+  'prefix.value.required': 'Value is required',
+};
+
+// create factor to create FormControls
+const factory = new MyModelFormControlFactory(model);
+this.formGroup = new TypedFormGroup<MyModel>({
+  value: factory.createFormControl<string>('value')
+});
+```
+
+and this controls can be used in view like this:
+
+```
+<form [formGroup]="formGroup">
+  <input type="text" [formControlName]="properties.value"
+        [required]="formGroup.isValidatorRegistered(properties.value, 'required')" />
+  <!-- only a single error hint is necessary -->
+  <span class="error" *ngIf="formGroup.hasControlErrors(properties.value)">
+  {{errorMap[formGroup.nextControlErrorKey(properties.value, 'prefix')]}}
+  <!-- prefix.value.required is returned, if error occurs -->
+  </span>
+</form>
+```
+
+Only a single `span` is used to display errors for the field. Best usage is reached with `<mat-error>` tag from [material.angular.io](https://material.angular.io).
 
 ## License
 

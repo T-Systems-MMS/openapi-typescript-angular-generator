@@ -6,16 +6,24 @@
     "type": "git",
     "url": "https://github.com/T-Systems-MMS/openapi-typescript-angular-generator.git"
   },
-  "bin": "./bin/ng-ts-codegen.js",
+  "scripts": {
+    "build": "rollup -c",
+    "test": "jest --config jest.config.js",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test"
+  },
+  "files": [
+    "dist",
+    "src/mustache",
+    "bin"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "bin": "bin/ng-ts-codegen.js",
   "dependencies": {
-    "@angular/common": "^7.0.0",
-    "@angular/core": "^7.0.0",
-    "@angular/forms": "^7.0.0",
-    "@angular/platform-browser": "^7.0.0",
     "fs-extra": "^7.0.1",
-    "rxjs": "~6.3.3",
-    "yargs": "^12.0.5",
-    "zone.js": "^0.8.26"
+    "yargs": "^12.0.5"
   },
   "keywords": [
     "openapi",
@@ -26,5 +34,22 @@
     "André Jähnig",
     "Stefan Schubert"
   ],
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "peerDependencies": {
+    "@angular/forms": ">=7.0.0 <8.0.0"
+  },
+  "devDependencies": {
+    "@angular/common": "^7.0.0",
+    "@angular/core": "^7.0.0",
+    "@angular/forms": "^7.0.0",
+    "@angular/platform-browser": "^7.0.0",
+    "@types/jest": "^23.3.14",
+    "jest": "^23.6.0",
+    "rollup": "^1.1.2",
+    "rollup-plugin-typescript2": "^0.19.2",
+    "rxjs": "~6.3.3",
+    "ts-jest": "^23.10.5",
+    "typescript": "^3.3.3",
+    "zone.js": "^0.8.26"
+  }
 }

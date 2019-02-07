@@ -4,7 +4,7 @@
 ### Angular ###
 ## Angular ##
 # compiled output
-/dist
+/.rpt2_cache
 /tmp
 /app/**/*.js
 /app/**/*.js.map

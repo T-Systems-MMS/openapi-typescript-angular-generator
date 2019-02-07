@@ -3,7 +3,8 @@
  * Riesaer Str. 5, 01129 Dresden
  * All rights reserved.
  */
-import { ValidatorFn, FormControl, AsyncValidatorFn } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms';
+import { TypedFormControl, TypedControlOptions } from './formcontrol';
 
 /**
  * This is the base from control factory for each model. Based on this class, each model is implementing it's own
@@ -12,7 +13,7 @@ import { ValidatorFn, FormControl, AsyncValidatorFn } from '@angular/forms';
  * The factory also ensures that model and validator match one another.
  */
 export class BaseFormControlFactory<T> {
-  private map: Map<keyof T, { value: any; validators: Array<ValidatorFn> }>;
+  private map: Map<keyof T, { value: any; validators: [string, ValidatorFn][] }>;
 
   /**
    * Constructor.
@@ -21,7 +22,7 @@ export class BaseFormControlFactory<T> {
    *
    * @param validators An array of validators.
    */
-  constructor(model: T, validators: { [K in keyof T]?: Array<ValidatorFn> }) {
+  constructor(model: T, validators: { [K in keyof T]: [string, ValidatorFn][] }) {
     this.map = new Map();
 
     for (const property in model) {
@@ -37,14 +38,20 @@ export class BaseFormControlFactory<T> {
   }
 
   /**
-   * Creates a new `FormControl` instance.
+   * Creates a new `TypedFormControl` instance.
    *
-   * @param property the property of the model for which the `FormControl` should be created.
-   *
-   * @param asyncValidator A single async validator or array of async validator functions.
+   * @param property the property of the model for which the `TypedFormControl` should be created.
+   * @param controlOpts add custom validators to the default ones given in the constructor.
    */
-  createFormControl(property: keyof T, asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null): FormControl {
+  createFormControl<K>(property: keyof T, controlOpts?: TypedControlOptions): TypedFormControl<K> {
     const model = this.map.get(property);
-    return new FormControl(model.value, model.validators, asyncValidator);
+    if (model) {
+      return new TypedFormControl(model.value, {
+        validators: [...model.validators, ...(controlOpts ? controlOpts.validators : [])],
+        asyncValidators: controlOpts ? controlOpts.asyncValidators : undefined,
+        updateOn: controlOpts ? controlOpts.updateOn : undefined,
+      });
+    }
+    return new TypedFormControl();
   }
 }
