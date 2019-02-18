@@ -65,7 +65,7 @@ export class TypedFormGroup<T> extends FormGroup {
   }
 
   /**
-   * Detects if a error is present for given control name.
+   * Detects if an error is present for given control name.
    *
    * @param name control name of the form group
    */
@@ -81,11 +81,14 @@ export class TypedFormGroup<T> extends FormGroup {
    * @param validatorName validator name
    */
   isValidatorRegistered(name: Extract<keyof T, string>, validatorName: string): boolean {
-    return this.registeredValidatorsMap[name].some(errorKey => errorKey === validatorName);
+    return (
+      this.registeredValidatorsMap[name] &&
+      this.registeredValidatorsMap[name].some(errorKey => errorKey === validatorName)
+    );
   }
 
   /**
-   * Returns a error key for the next error (<controlName>.<errorKey>).
+   * Returns an error key for the next error (<controlName>.<errorKey>).
    *
    * @param name control key of the form group
    * @param prefix to be prepend to the error key
@@ -94,7 +97,9 @@ export class TypedFormGroup<T> extends FormGroup {
     const control = this.get(name);
     if (control && control.errors) {
       // try client side keys first for correct order
-      let error = this.registeredValidatorsMap[name].find(validatorKey => control.hasError(validatorKey));
+      let error =
+        this.registeredValidatorsMap[name] &&
+        this.registeredValidatorsMap[name].find(validatorKey => control.hasError(validatorKey));
       if (!error) {
         // fallback to all errors including custom errors set after backend calls
         error = Object.keys(control.errors).shift();
@@ -107,7 +112,7 @@ export class TypedFormGroup<T> extends FormGroup {
   }
 
   /**
-   * Dispatches errors this control and to child controls using given error map.
+   * Dispatches errors to this control and to child controls using given error map.
    *
    * @param errors error map
    * @param contextPath optional context path to errors set to
@@ -117,6 +122,7 @@ export class TypedFormGroup<T> extends FormGroup {
     paths.forEach(path => {
       const control = this.get(<Extract<keyof T, string>>(contextPath ? `${contextPath}.${path}` : path));
       if (control) {
+        // enables showing errors in view
         control.markAsTouched();
         control.setErrors(errors[path]);
       }

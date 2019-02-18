@@ -19,8 +19,7 @@ export class BaseFormControlFactory<T> {
    * Constructor.
    *
    * @param model The model object.
-   *
-   * @param validators An array of validators.
+   * @param validators properties validators map
    */
   constructor(model: T, validators: { [K in keyof T]: [string, ValidatorFn][] }) {
     this.map = new Map();
@@ -41,7 +40,8 @@ export class BaseFormControlFactory<T> {
    * Creates a new `TypedFormControl` instance.
    *
    * @param property the property of the model for which the `TypedFormControl` should be created.
-   * @param controlOpts add custom validators to the default ones given in the constructor.
+   * @param controlOpts add custom validators to the default ones given in the constructor, optional async validators
+   * and update mode.
    */
   createFormControl<K>(property: keyof T, controlOpts?: TypedControlOptions): TypedFormControl<K> {
     const model = this.map.get(property);

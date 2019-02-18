@@ -101,8 +101,7 @@ var BaseFormControlFactory = /** @class */ (function () {
      * Constructor.
      *
      * @param model The model object.
-     *
-     * @param validators An array of validators.
+     * @param validators properties validators map
      */
     function BaseFormControlFactory(model, validators) {
         this.map = new Map();
@@ -120,7 +119,8 @@ var BaseFormControlFactory = /** @class */ (function () {
      * Creates a new `TypedFormControl` instance.
      *
      * @param property the property of the model for which the `TypedFormControl` should be created.
-     * @param controlOpts add custom validators to the default ones given in the constructor.
+     * @param controlOpts add custom validators to the default ones given in the constructor, optional async validators
+     * and update mode.
      */
     BaseFormControlFactory.prototype.createFormControl = function (property, controlOpts) {
         var model = this.map.get(property);
@@ -179,7 +179,7 @@ var TypedFormGroup = /** @class */ (function (_super) {
         return null;
     };
     /**
-     * Detects if a error is present for given control name.
+     * Detects if an error is present for given control name.
      *
      * @param name control name of the form group
      */
@@ -194,10 +194,11 @@ var TypedFormGroup = /** @class */ (function (_super) {
      * @param validatorName validator name
      */
     TypedFormGroup.prototype.isValidatorRegistered = function (name, validatorName) {
-        return this.registeredValidatorsMap[name].some(function (errorKey) { return errorKey === validatorName; });
+        return (this.registeredValidatorsMap[name] &&
+            this.registeredValidatorsMap[name].some(function (errorKey) { return errorKey === validatorName; }));
     };
     /**
-     * Returns a error key for the next error (<controlName>.<errorKey>).
+     * Returns an error key for the next error (<controlName>.<errorKey>).
      *
      * @param name control key of the form group
      * @param prefix to be prepend to the error key
@@ -206,7 +207,8 @@ var TypedFormGroup = /** @class */ (function (_super) {
         var control = this.get(name);
         if (control && control.errors) {
             // try client side keys first for correct order
-            var error = this.registeredValidatorsMap[name].find(function (validatorKey) { return control.hasError(validatorKey); });
+            var error = this.registeredValidatorsMap[name] &&
+                this.registeredValidatorsMap[name].find(function (validatorKey) { return control.hasError(validatorKey); });
             if (!error) {
                 // fallback to all errors including custom errors set after backend calls
                 error = Object.keys(control.errors).shift();
@@ -218,7 +220,7 @@ var TypedFormGroup = /** @class */ (function (_super) {
         return '';
     };
     /**
-     * Dispatches errors this control and to child controls using given error map.
+     * Dispatches errors to this control and to child controls using given error map.
      *
      * @param errors error map
      * @param contextPath optional context path to errors set to
@@ -229,6 +231,7 @@ var TypedFormGroup = /** @class */ (function (_super) {
         paths.forEach(function (path) {
             var control = _this.get((contextPath ? contextPath + "." + path : path));
             if (control) {
+                // enables showing errors in view
                 control.markAsTouched();
                 control.setErrors(errors[path]);
             }

@@ -30,7 +30,7 @@ export declare class TypedFormGroup<T> extends FormGroup {
      */
     getNestedGroup<K>(path: Extract<keyof T, string>): TypedFormGroup<K> | null;
     /**
-     * Detects if a error is present for given control name.
+     * Detects if an error is present for given control name.
      *
      * @param name control name of the form group
      */
@@ -43,14 +43,14 @@ export declare class TypedFormGroup<T> extends FormGroup {
      */
     isValidatorRegistered(name: Extract<keyof T, string>, validatorName: string): boolean;
     /**
-     * Returns a error key for the next error (<controlName>.<errorKey>).
+     * Returns an error key for the next error (<controlName>.<errorKey>).
      *
      * @param name control key of the form group
      * @param prefix to be prepend to the error key
      */
     nextControlErrorKey(name: Extract<keyof T, string>, prefix?: string): string;
     /**
-     * Dispatches errors this control and to child controls using given error map.
+     * Dispatches errors to this control and to child controls using given error map.
      *
      * @param errors error map
      * @param contextPath optional context path to errors set to
