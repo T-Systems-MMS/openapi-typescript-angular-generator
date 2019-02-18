@@ -23,16 +23,16 @@ Run it with `npx openapi-typescript-angular-generator` and following options:
 
 `Docker` or `Java` must be installed for the generator to work.
 
-Pay attention to the input/output-parameter when using docker. These parameters will be used after the docker container is started and the volumne is mounted. So any path-resolution, except the input-parameter is an url, will be start from `/local`.
+Pay attention to the input/output-parameter when using docker. These parameters will be used after the docker container is started and the volume is mounted. So any path-resolution, except the input-parameter is an url, will be start from `/local`.
 
 Proxy settings from the executed process will be applied to the openapi-generator-process.
 
 ### Usage of custom `FormGroup` and `FormControl` with `FormControl`-factories
 
-For each model is a `FormControl`-factory generated. This factory can be used to create `FormControl`-instances:
+For each model a `FormControl`-factory is generated. This factory can be used to create `FormControl`-instances:
 
 ```
-// generate model
+// generated model
 interface MyModel {
   value: string;
 }
@@ -42,31 +42,34 @@ namespace MyModel {
   }
 }
 
-// model fetch from service
+// example data that could be fetched from a service
 this.model: MyModel = { value: 'foobar' };
 this.properties = MyModel.Properties;
 this.errorMap = {
   'prefix.value.required': 'Value is required',
 };
 
-// create factor to create FormControls
+// create a factory to create FormControls
 const factory = new MyModelFormControlFactory(model);
 this.formGroup = new TypedFormGroup<MyModel>({
   value: factory.createFormControl<string>('value')
 });
 ```
 
-and this controls can be used in view like this:
+Now the created controls can be used at the view like this:
 
 ```
 <form [formGroup]="formGroup">
+
   <input type="text" [formControlName]="properties.value"
         [required]="formGroup.isValidatorRegistered(properties.value, 'required')" />
+
   <!-- only a single error hint is necessary -->
   <span class="error" *ngIf="formGroup.hasControlErrors(properties.value)">
-  {{errorMap[formGroup.nextControlErrorKey(properties.value, 'prefix')]}}
-  <!-- prefix.value.required is returned, if error occurs -->
+    <!-- prefix.value.required is returned, if error occurs -->
+    {{ errorMap[formGroup.nextControlErrorKey(properties.value, 'prefix')] }}
   </span>
+
 </form>
 ```
 
