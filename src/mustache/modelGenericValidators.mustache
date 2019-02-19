@@ -2,7 +2,7 @@
 {{! Riesaer Str. 5, 01129 Dresden }}
 {{! All rights reserved. }}
 /**
- * A map of `ValidatorFn` for each property of {{classname}}.
+ * A map of tubles with error name and `ValidatorFn` for each property of {{classname}}.
  */
 export const {{classname}}Validators: {[K in keyof {{classname}}]: [string, ValidatorFn][]} = {
 {{#vars}}

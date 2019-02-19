@@ -79,7 +79,7 @@ var TypedFormControl = /** @class */ (function (_super) {
                 validatorsList.push(validatorOpts.asyncValidators);
             }
             validatorsList.forEach(function (validators) {
-                keys = keys.concat(validators
+                keys.push.apply(keys, validators
                     .map(function (validator) { return validator && validator[0]; })
                     // filter duplicates
                     .filter(function (key, index, array) { return array.indexOf(key) === index; }));

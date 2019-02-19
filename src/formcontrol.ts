@@ -107,13 +107,12 @@ export class TypedFormControl<T> extends FormControl {
         validatorsList.push(validatorOpts.asyncValidators);
       }
       validatorsList.forEach((validators: [string, ValidatorFn | AsyncValidatorFn][]) => {
-        keys = [
-          ...keys,
+        keys.push(
           ...validators
             .map(validator => validator && validator[0])
             // filter duplicates
-            .filter((key, index, array) => array.indexOf(key) === index),
-        ];
+            .filter((key, index, array) => array.indexOf(key) === index)
+        );
       });
     }
     return keys;
