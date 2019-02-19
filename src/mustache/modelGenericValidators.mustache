@@ -2,29 +2,29 @@
 {{! Riesaer Str. 5, 01129 Dresden }}
 {{! All rights reserved. }}
 /**
- * A map of `ValidatorFn` for each property of {{classname}}.
+ * A map of tubles with error name and `ValidatorFn` for each property of {{classname}}.
  */
-export const {{classname}}Validators: {[K in keyof {{classname}}]?: Array<ValidatorFn>} = {
+export const {{classname}}Validators: {[K in keyof {{classname}}]: [string, ValidatorFn][]} = {
 {{#vars}}
     {{name}}: [
-        {{#required}}
-            Validators.required,
+            {{#required}}
+            ['required', Validators.required],
             {{/required}}
             {{#hasValidation}}
             {{#minimum}}
-            Validators.min({{minimum}}),
+            ['min', Validators.min({{minimum}})],
             {{/minimum}}
             {{#maximum}}
-            Validators.max({{maximum}}),
+            ['max', Validators.max({{maximum}})],
             {{/maximum}}
             {{#minLength}}
-            Validators.minLength({{minLength}}),
+            ['minlength', Validators.minLength({{minLength}})],
             {{/minLength}}
             {{#maxLength}}
-            Validators.maxLength({{maxLength}}),
+            ['maxlength', Validators.maxLength({{maxLength}})],
             {{/maxLength}}
             {{#pattern}}
-            Validators.pattern({{pattern}}),
+            ['pattern', Validators.pattern({{pattern}})],
             {{/pattern}}
             {{/hasValidation}}
     ],
