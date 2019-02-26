@@ -33,6 +33,39 @@ export namespace {{operationIdCamelCase}} {
       {{paramName}} = '{{paramName}}'{{^-last}},{{/-last}}
     {{/allParams}}
     }
+
+    /**
+     * A map of tuples with error name and `ValidatorFn` for each parameter of {{nickname}}
+     * that does not have an own model.
+     */
+    export const ParamValidators: {[K in keyof {{operationIdCamelCase}}.PartialParamMap]: [string, ValidatorFn][]} = {
+    {{#allParams}}
+    {{^isModel}}
+      {{paramName}}: [
+              {{#required}}
+              ['required', Validators.required],
+              {{/required}}
+              {{#hasValidation}}
+              {{#minimum}}
+              ['min', Validators.min({{minimum}})],
+              {{/minimum}}
+              {{#maximum}}
+              ['max', Validators.max({{maximum}})],
+              {{/maximum}}
+              {{#minLength}}
+              ['minlength', Validators.minLength({{minLength}})],
+              {{/minLength}}
+              {{#maxLength}}
+              ['maxlength', Validators.maxLength({{maxLength}})],
+              {{/maxLength}}
+              {{#pattern}}
+              ['pattern', Validators.pattern({{pattern}})],
+              {{/pattern}}
+              {{/hasValidation}}
+      ],
+    {{/isModel}}
+    {{/allParams}}
+    }
 }
 
 {{/operation}}

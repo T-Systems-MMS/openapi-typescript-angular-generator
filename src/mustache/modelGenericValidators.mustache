@@ -1,41 +1,41 @@
 {{! Copyright(c) 1995 - 2018 T-Systems Multimedia Solutions GmbH }}
 {{! Riesaer Str. 5, 01129 Dresden }}
 {{! All rights reserved. }}
-/**
- * A map of tubles with error name and `ValidatorFn` for each property of {{classname}}.
- */
-export const {{classname}}Validators: {[K in keyof {{classname}}]: [string, ValidatorFn][]} = {
-{{#vars}}
-    {{name}}: [
-            {{#required}}
-            ['required', Validators.required],
-            {{/required}}
-            {{#hasValidation}}
-            {{#minimum}}
-            ['min', Validators.min({{minimum}})],
-            {{/minimum}}
-            {{#maximum}}
-            ['max', Validators.max({{maximum}})],
-            {{/maximum}}
-            {{#minLength}}
-            ['minlength', Validators.minLength({{minLength}})],
-            {{/minLength}}
-            {{#maxLength}}
-            ['maxlength', Validators.maxLength({{maxLength}})],
-            {{/maxLength}}
-            {{#pattern}}
-            ['pattern', Validators.pattern({{pattern}})],
-            {{/pattern}}
-            {{/hasValidation}}
-    ],
-{{/vars}}
-};
+    /**
+    * A map of tuples with error name and `ValidatorFn` for each property of {{classname}}.
+    */
+    export const ModelValidators: {[K in keyof {{classname}}]: [string, ValidatorFn][]} = {
+    {{#vars}}
+        {{name}}: [
+                {{#required}}
+                ['required', Validators.required],
+                {{/required}}
+                {{#hasValidation}}
+                {{#minimum}}
+                ['min', Validators.min({{minimum}})],
+                {{/minimum}}
+                {{#maximum}}
+                ['max', Validators.max({{maximum}})],
+                {{/maximum}}
+                {{#minLength}}
+                ['minlength', Validators.minLength({{minLength}})],
+                {{/minLength}}
+                {{#maxLength}}
+                ['maxlength', Validators.maxLength({{maxLength}})],
+                {{/maxLength}}
+                {{#pattern}}
+                ['pattern', Validators.pattern({{pattern}})],
+                {{/pattern}}
+                {{/hasValidation}}
+        ],
+    {{/vars}}
+    };
 
-/**
- * The FormControlFactory for {{classname}}.
- */
-export class {{classname}}FormControlFactory extends BaseFormControlFactory<{{classname}}> {
-    constructor(model: {{classname}}) {
-        super(model, {{classname}}Validators);
+    /**
+    * The FormControlFactory for {{classname}}.
+    */
+    export class FormControlFactory extends BaseFormControlFactory<{{classname}}> {
+        constructor(model: {{classname}}) {
+            super(model, {{classname}}.ModelValidators);
+        }
     }
-}
