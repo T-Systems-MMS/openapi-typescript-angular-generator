@@ -50,7 +50,7 @@ this.errorMap = {
 };
 
 // create a factory to create FormControls
-const factory = new MyModelFormControlFactory(model);
+const factory = new MyModel.FormControlFactory(model);
 this.formGroup = new TypedFormGroup<MyModel>({
   value: factory.createFormControl<string>('value')
 });
