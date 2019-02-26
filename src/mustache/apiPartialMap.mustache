@@ -38,7 +38,7 @@ export namespace {{operationIdCamelCase}} {
      * A map of tuples with error name and `ValidatorFn` for each parameter of {{nickname}}
      * that does not have an own model.
      */
-    export const ParamValidators: {[K in keyof {{operationIdCamelCase}}.PartialParamMap]: [string, ValidatorFn][]} = {
+    export const ParamValidators: {[K in keyof {{operationIdCamelCase}}.PartialParamMap]?: [string, ValidatorFn][]} = {
     {{#allParams}}
     {{^isModel}}
       {{paramName}}: [
@@ -65,7 +65,7 @@ export namespace {{operationIdCamelCase}} {
       ],
     {{/isModel}}
     {{/allParams}}
-    }
+    };
 }
 
 {{/operation}}
