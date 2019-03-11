@@ -149,11 +149,6 @@ command += ` ${args.join(' ')}`;
 // execute
 console.log('Executing following command to generate the code:\n', command);
 const cmd = exec(command, () => {
-  // copy base-form-control-factory
-  const src = resolve(__dirname, '../src/base-form-control-factory.ts');
-  const dst = resolve(process.cwd(), argv.o, 'model/base-form-control-factory.ts');
-  fse.copy(src, dst).catch(err => console.log(err));
-
   // clean up
   const files = ['.openapi-generator', '.gitignore', '.openapi-generator-ignore', 'git_push.sh', 'README.md'];
   files.forEach(f => fse.remove(resolve(process.cwd(), argv.o, f)));
