@@ -92,9 +92,14 @@ if (!argv.o) {
 let command;
 let isDocker = false;
 if (argv.e === 'docker') {
-  const proxyArgs = getProxyArgsForDocker();
+  // transfer post processing env-variable to docker if it exists
+  let envArgs = process.env.TS_POST_PROCESS_FILE ? ` --env TS_POST_PROCESS_FILE="${process.env.TS_POST_PROCESS_FILE}"` : ''
+
+  // add proxy args
+  envArgs += getProxyArgsForDocker();
+
   const volume = argv.m || process.env.PWD;
-  command = `docker run${proxyArgs} --rm -v ${volume}:/local ${dockerImageName}`;
+  command = `docker run${envArgs} --rm -v ${volume}:/local ${dockerImageName}`;
   isDocker = true;
 } else {
   // default to java
@@ -115,6 +120,11 @@ const args = [
       : resolve(__dirname, '../src/mustache')
   }`,
 ];
+
+// enable post processing if environment variable TS_POST_PROCESS_FILE is set
+if (process.env.TS_POST_PROCESS_FILE) {
+  args.push('--enable-post-process-file',)
+}
 
 // add auth headers
 if (argv.a) {
