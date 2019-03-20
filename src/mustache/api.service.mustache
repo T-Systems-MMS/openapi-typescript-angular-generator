@@ -23,6 +23,7 @@ import { Observable }                                        from 'rxjs/Observab
 {{/useRxJS6}}
 {{#useRxJS6}}
 import { Observable }                                        from 'rxjs';
+import { catchError }                                        from 'rxjs/operators';
 {{/useRxJS6}}
 {{^useHttpClient}}
 import '../rxjs-operators';
@@ -311,7 +312,7 @@ export class {{classname}} {
 
 {{/hasFormParams}}
 {{#useHttpClient}}
-        return this.httpClient.{{httpMethod}}{{^isResponseFile}}<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>{{/isResponseFile}}(`${this.configuration.basePath}{{{path}}}`,{{#isBodyAllowed}}
+        const handle = this.httpClient.{{httpMethod}}{{^isResponseFile}}<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>{{/isResponseFile}}(`${this.configuration.basePath}{{{path}}}`,{{#isBodyAllowed}}
             {{#bodyParam}}{{paramName}}{{/bodyParam}}{{^bodyParam}}{{#hasFormParams}}convertFormParamsToString ? formParams.toString() : formParams{{/hasFormParams}}{{^hasFormParams}}null{{/hasFormParams}}{{/bodyParam}},{{/isBodyAllowed}}
             {
 {{#hasQueryParams}}
@@ -326,6 +327,10 @@ export class {{classname}} {
                 reportProgress: reportProgress
             }
         );
+        if(typeof this.configuration.errorHandler === 'function') {
+          return handle.pipe(catchError(err => this.configuration.errorHandler(err)));
+        }
+        return handle;
 {{/useHttpClient}}
 {{^useHttpClient}}
         let requestOptions: RequestOptionsArgs = new RequestOptions({
@@ -350,7 +355,11 @@ export class {{classname}} {
             requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
         }
 
-        return this.http.request(`${this.configuration.basePath}{{{path}}}`, requestOptions);
+        const handle = this.http.request(`${this.configuration.basePath}{{{path}}}`, requestOptions);
+        if(typeof this.configuration.errorHandler === 'function') {
+          return handle.catch(err => this.configuration.errorHandler(err));
+        }
+        return handle;
 {{/useHttpClient}}
     }
 
