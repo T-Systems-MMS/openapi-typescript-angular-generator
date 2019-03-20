@@ -23,6 +23,7 @@ export class Configuration {
     username?: string;
     password?: string;
     accessToken?: string | (() => string);
+    errorHandler?: (err: any) => Observable<never>;
     basePath?: string;
     withCredentials?: boolean;
 
@@ -31,6 +32,7 @@ export class Configuration {
         this.username = configurationParameters.username;
         this.password = configurationParameters.password;
         this.accessToken = configurationParameters.accessToken;
+        this.errorHandler = configurationParameters.errorHandler;
         this.basePath = configurationParameters.basePath;
         this.withCredentials = configurationParameters.withCredentials;
     }
