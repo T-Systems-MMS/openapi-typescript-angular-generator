@@ -328,7 +328,7 @@ export class {{classname}} {
             }
         );
         if(typeof this.configuration.errorHandler === 'function') {
-          return handle.pipe(catchError(err => this.configuration.errorHandler(err)));
+          return handle.pipe(catchError(err => this.configuration.errorHandler(err, '{{operationIdOriginal}}')));
         }
         return handle;
 {{/useHttpClient}}
@@ -357,7 +357,7 @@ export class {{classname}} {
 
         const handle = this.http.request(`${this.configuration.basePath}{{{path}}}`, requestOptions);
         if(typeof this.configuration.errorHandler === 'function') {
-          return handle.catch(err => this.configuration.errorHandler(err));
+          return handle.catch(err => this.configuration.errorHandler(err, '{{operationIdOriginal}}'));
         }
         return handle;
 {{/useHttpClient}}

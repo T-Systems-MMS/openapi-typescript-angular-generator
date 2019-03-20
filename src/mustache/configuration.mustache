@@ -2,10 +2,10 @@
 {{! Riesaer Str. 5, 01129 Dresden }}
 {{! All rights reserved. }}
 {{^useRxJS6}}
-import { Observable }                                        from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 {{/useRxJS6}}
 {{#useRxJS6}}
-import { Observable }                                        from 'rxjs';
+import { Observable } from 'rxjs';
 {{/useRxJS6}}
 
 export interface ConfigurationParameters {
@@ -13,7 +13,7 @@ export interface ConfigurationParameters {
     username?: string;
     password?: string;
     accessToken?: string | (() => string);
-    errorHandler?: (err: any) => Observable<never>;
+    errorHandler?: (err: any, operationName: string) => Observable<never>;
     basePath?: string;
     withCredentials?: boolean;
 }
@@ -23,7 +23,7 @@ export class Configuration {
     username?: string;
     password?: string;
     accessToken?: string | (() => string);
-    errorHandler?: (err: any) => Observable<never>;
+    errorHandler?: (err: any, operationName: string) => Observable<never>;
     basePath?: string;
     withCredentials?: boolean;
 
