@@ -88,12 +88,11 @@ export class TypedFormGroup<T> extends FormGroup {
   }
 
   /**
-   * Returns an error key for the next error (<controlName>.<errorKey>).
+   * Returns an error key for the next error.
    *
    * @param name control key of the form group
-   * @param prefix to be prepend to the error key
    */
-  nextControlErrorKey(name: Extract<keyof T, string>, prefix?: string): string {
+  nextControlErrorKey(name: Extract<keyof T, string>): string {
     const control = this.get(name);
     if (control && control.errors) {
       // try client side keys first for correct order
@@ -105,7 +104,7 @@ export class TypedFormGroup<T> extends FormGroup {
         error = Object.keys(control.errors).shift();
       }
       if (error) {
-        return `${prefix ? `${prefix}.` : ''}${name}.${error}`;
+        return error;
       }
     }
     return '';
