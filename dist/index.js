@@ -202,12 +202,11 @@ var TypedFormGroup = /** @class */ (function (_super) {
             this.registeredValidatorsMap[name].some(function (errorKey) { return errorKey === validatorName; }));
     };
     /**
-     * Returns an error key for the next error (<controlName>.<errorKey>).
+     * Returns an error key for the next error.
      *
      * @param name control key of the form group
-     * @param prefix to be prepend to the error key
      */
-    TypedFormGroup.prototype.nextControlErrorKey = function (name, prefix) {
+    TypedFormGroup.prototype.nextControlErrorKey = function (name) {
         var control = this.get(name);
         if (control && control.errors) {
             // try client side keys first for correct order
@@ -218,7 +217,7 @@ var TypedFormGroup = /** @class */ (function (_super) {
                 error = Object.keys(control.errors).shift();
             }
             if (error) {
-                return "" + (prefix ? prefix + "." : '') + name + "." + error;
+                return error;
             }
         }
         return '';

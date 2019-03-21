@@ -11,7 +11,7 @@ interface NestedType {
   deepValue: string;
 }
 
-test('Test FormGroupControl creation', () => {
+test('Test FormGroupControl creation #1', () => {
   const factory = new BaseFormControlFactory<TestType>(
     { value: 'testValue', nested: { deepValue: 'deepTestValue' } },
     { value: [['req', Validators.required]], nested: [] }
@@ -60,14 +60,14 @@ test('Test FormGroupControl creation', () => {
   expect(nestedGroup.hasControlErrors('deepValue')).toBe(true);
   expect(group.isValidatorRegistered('value', 'required')).toBe(false);
   expect(nestedGroup.isValidatorRegistered('deepValue', 'required')).toBe(false);
-  expect(group.nextControlErrorKey('value')).toBe('value.req');
-  expect(nestedGroup.nextControlErrorKey('deepValue')).toBe('deepValue.req');
+  expect(group.nextControlErrorKey('value')).toBe('req');
+  expect(nestedGroup.nextControlErrorKey('deepValue')).toBe('req');
 
   valueControl.setErrors({ other: 'Other Error!' });
-  expect(group.nextControlErrorKey('value')).toBe('value.other');
+  expect(group.nextControlErrorKey('value')).toBe('other');
 });
 
-test('Test FormGroupControl creation', () => {
+test('Test FormGroupControl creation #2', () => {
   const nestedFactory = new BaseFormControlFactory<NestedType>(
     { deepValue: 'deepTestValue' },
     { deepValue: [['req', Validators.required]] }

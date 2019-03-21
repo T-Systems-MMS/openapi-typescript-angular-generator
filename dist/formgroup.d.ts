@@ -43,12 +43,11 @@ export declare class TypedFormGroup<T> extends FormGroup {
      */
     isValidatorRegistered(name: Extract<keyof T, string>, validatorName: string): boolean;
     /**
-     * Returns an error key for the next error (<controlName>.<errorKey>).
+     * Returns an error key for the next error.
      *
      * @param name control key of the form group
-     * @param prefix to be prepend to the error key
      */
-    nextControlErrorKey(name: Extract<keyof T, string>, prefix?: string): string;
+    nextControlErrorKey(name: Extract<keyof T, string>): string;
     /**
      * Dispatches errors to this control and to child controls using given error map.
      *
