@@ -35,7 +35,21 @@
     * The FormControlFactory for {{classname}}.
     */
     export class FormControlFactory extends BaseFormControlFactory<{{classname}}> {
-        constructor(model: {{classname}}) {
+
+        /**
+         * Constructor.
+         *
+         * @param model An existing model for {{classname}}.
+         *              If given, all form-controls of the factory automatically have the value of this model. If this
+         *              model is not given, all values are `null`.
+         */
+        constructor(
+          model: {{classname}} = {
+          {{#vars}}
+            {{name}}: null,
+          {{/vars}}
+          }
+        ) {
             super(model, {{classname}}.ModelValidators);
         }
     }
