@@ -184,7 +184,7 @@ export class {{classname}} {
 {{/hasQueryParams}}
         let headers = {{#useHttpClient}}this.defaultHeaders;{{/useHttpClient}}{{^useHttpClient}}new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845{{/useHttpClient}}
 {{#headerParams}}
-        if(typeof this.configuration.defaultHeaderValue === 'function') {
+        if(typeof this.configuration.defaultHeaderValue === 'function' && ({{paramName}} === undefined || {{paramName}} === null)) {
             {{paramName}} = this.configuration.defaultHeaderValue('{{paramName}}');
         }
         {{#isListContainer}}
