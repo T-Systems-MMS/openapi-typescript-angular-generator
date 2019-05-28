@@ -14,7 +14,7 @@ export interface ConfigurationParameters {
     password?: string;
     accessToken?: string | (() => string);
     errorHandler?: (err: any, operationName: string) => Observable<never>;
-    defaultHeaderValue?: (headerName: string) => string;
+    defaultHeaderValue?: (headerName: string, operationName: string) => string;
     basePath?: string;
     withCredentials?: boolean;
 }
@@ -25,7 +25,7 @@ export class Configuration {
     password?: string;
     accessToken?: string | (() => string);
     errorHandler?: (err: any, operationName: string) => Observable<never>;
-    defaultHeaderValue?: (headerName: string) => string;
+    defaultHeaderValue?: (headerName: string, operationName: string) => string;
     basePath?: string;
     withCredentials?: boolean;
 
