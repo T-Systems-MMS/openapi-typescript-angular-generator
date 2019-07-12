@@ -134,15 +134,16 @@ export class {{classname}} {
      {{#allParams}}* @param {{paramName}} {{description}}
      {{/allParams}}{{#useHttpClient}}* @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.{{/useHttpClient}}
+     * @param cancelPreviousRequest set whether or not the previous request for the same operation should be cancelled if it is still running.
      */
     {{#useHttpClient}}
-    public {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}observe?: 'body', reportProgress?: boolean): Observable<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>;
-    public {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>>;
-    public {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>>;
-    public {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}observe?: 'body', reportProgress?: boolean, cancelPreviousRequest?: boolean): Observable<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>;
+    public {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}observe?: 'response', reportProgress?: boolean, cancelPreviousRequest?: boolean): Observable<HttpResponse<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>>;
+    public {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}observe?: 'events', reportProgress?: boolean, cancelPreviousRequest?: boolean): Observable<HttpEvent<{{#returnType}}{{{returnType}}}{{#isResponseTypeFile}}|undefined{{/isResponseTypeFile}}{{/returnType}}{{^returnType}}any{{/returnType}}>>;
+    public {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}observe: any = 'body', reportProgress: boolean = false, cancelPreviousRequest: boolean = true): Observable<any> {
     {{/useHttpClient}}
     {{^useHttpClient}}
-    public {{nickname}}WithHttpInfo({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}extraHttpRequestParams?: RequestOptionsArgs): Observable<Response> {
+    public {{nickname}}WithHttpInfo({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}extraHttpRequestParams?: RequestOptionsArgs, cancelPreviousRequest: boolean = true): Observable<Response> {
     {{/useHttpClient}}
 {{#allParams}}
 {{#required}}
@@ -333,15 +334,19 @@ export class {{classname}} {
                 reportProgress: reportProgress
             }
         );
-        if (this.cancelMap['{{operationIdOriginal}}']) {
-            this.cancelMap['{{operationIdOriginal}}'].next();
-            this.cancelMap['{{operationIdOriginal}}'].complete();
-            this.cancelMap['{{operationIdOriginal}}'] = null;
+
+        if (cancelPreviousRequest) {
+            if (this.cancelMap['{{operationIdOriginal}}']) {
+                this.cancelMap['{{operationIdOriginal}}'].next();
+                this.cancelMap['{{operationIdOriginal}}'].complete();
+                this.cancelMap['{{operationIdOriginal}}'] = null;
+            }
+            this.cancelMap['{{operationIdOriginal}}'] = '{{httpMethod}}'.toUpperCase() === 'GET' ? new Subject<any>() : null;
+            if(this.cancelMap['{{operationIdOriginal}}']) {
+                handle = handle.pipe(takeUntil(this.cancelMap['{{operationIdOriginal}}']));
+            }
         }
-        this.cancelMap['{{operationIdOriginal}}'] = '{{httpMethod}}'.toUpperCase() === 'GET' ? new Subject<any>() : null;
-        if(this.cancelMap['{{operationIdOriginal}}']) {
-            handle = handle.pipe(takeUntil(this.cancelMap['{{operationIdOriginal}}']));
-        }
+
         if(typeof this.configuration.errorHandler === 'function') {
           return handle.pipe(catchError(err => this.configuration.errorHandler(err, '{{operationIdOriginal}}')));
         }
@@ -372,14 +377,16 @@ export class {{classname}} {
 
         let handle = this.http.request(`${this.configuration.basePath}{{{path}}}`, requestOptions);
 
-        if (this.cancelMap['{{operationIdOriginal}}']) {
-            this.cancelMap['{{operationIdOriginal}}'].next();
-            this.cancelMap['{{operationIdOriginal}}'].complete();
-            this.cancelMap['{{operationIdOriginal}}'] = null;
-        }
-        this.cancelMap['{{operationIdOriginal}}'] = '{{httpMethod}}'.toUpperCase() === 'GET' ? new Subject<any>() : null;
-        if(this.cancelMap['{{operationIdOriginal}}']) {
-            handle = handle.takeUntil(this.cancelMap['{{operationIdOriginal}}']);
+        if (cancelPreviousRequest) {
+            if (this.cancelMap['{{operationIdOriginal}}']) {
+                this.cancelMap['{{operationIdOriginal}}'].next();
+                this.cancelMap['{{operationIdOriginal}}'].complete();
+                this.cancelMap['{{operationIdOriginal}}'] = null;
+            }
+            this.cancelMap['{{operationIdOriginal}}'] = '{{httpMethod}}'.toUpperCase() === 'GET' ? new Subject<any>() : null;
+            if(this.cancelMap['{{operationIdOriginal}}']) {
+                handle = handle.takeUntil(this.cancelMap['{{operationIdOriginal}}']);
+            }
         }
 
         if(typeof this.configuration.errorHandler === 'function') {
