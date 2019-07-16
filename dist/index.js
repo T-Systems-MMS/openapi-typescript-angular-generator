@@ -244,5 +244,5 @@ var TypedFormGroup = /** @class */ (function (_super) {
 }(forms.FormGroup));
 
 exports.BaseFormControlFactory = BaseFormControlFactory;
-exports.TypedFormGroup = TypedFormGroup;
 exports.TypedFormControl = TypedFormControl;
+exports.TypedFormGroup = TypedFormGroup;

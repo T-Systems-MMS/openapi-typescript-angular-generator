@@ -239,4 +239,4 @@ var TypedFormGroup = /** @class */ (function (_super) {
     return TypedFormGroup;
 }(FormGroup));
 
-export { BaseFormControlFactory, TypedFormGroup, TypedFormControl };
+export { BaseFormControlFactory, TypedFormControl, TypedFormGroup };
