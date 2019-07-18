@@ -348,14 +348,14 @@ export class {{classname}} {
             }
         }
 
-        if(typeof this.configuration.beforeHandler === 'function') {
+        if (typeof this.configuration.beforeHandler === 'function') {
           this.configuration.beforeHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
         }
-        if(typeof this.configuration.afterHandler === 'function') {
-          handle = handle.pipe(tap(this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase()));
+        if (typeof this.configuration.afterHandler === 'function') {
+          handle = handle.pipe(tap(result => this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase(), result)));
         }
 
-        if(typeof this.configuration.errorHandler === 'function') {
+        if (typeof this.configuration.errorHandler === 'function') {
           return handle.pipe(catchError(err => this.configuration.errorHandler(err, '{{operationIdOriginal}}')));
         }
         return handle;
@@ -397,14 +397,14 @@ export class {{classname}} {
             }
         }
 
-        if(typeof this.configuration.beforeHandler === 'function') {
+        if (typeof this.configuration.beforeHandler === 'function') {
           this.configuration.beforeHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
         }
-        if(typeof this.configuration.afterHandler === 'function') {
-          handle = handle.tap(this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
+        if (typeof this.configuration.afterHandler === 'function') {
+          handle = handle.tap(result => this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase(), result));
         }
 
-        if(typeof this.configuration.errorHandler === 'function') {
+        if (typeof this.configuration.errorHandler === 'function') {
           return handle.catch(err => this.configuration.errorHandler(err, '{{operationIdOriginal}}'));
         }
         return handle;
