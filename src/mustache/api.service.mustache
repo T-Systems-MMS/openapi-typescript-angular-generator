@@ -24,11 +24,12 @@ import { Subject }                                           from 'rxjs/Subject'
 {{/useRxJS6}}
 {{#useRxJS6}}
 import { Observable, Subject }                               from 'rxjs';
-import { catchError, takeUntil }                             from 'rxjs/operators';
+import { catchError, takeUntil, tap }                        from 'rxjs/operators';
 {{/useRxJS6}}
 {{^useHttpClient}}
 import '../rxjs-operators';
 import 'rxjs/add/operator/takeUntil';
+import 'rxjs/add/operator/tap';
 {{/useHttpClient}}
 
 {{#imports}}
@@ -347,6 +348,13 @@ export class {{classname}} {
             }
         }
 
+        if(typeof this.configuration.beforeHandler === 'function') {
+          this.configuration.beforeHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
+        }
+        if(typeof this.configuration.afterHandler === 'function') {
+          handle = handle.pipe(tap(this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase()));
+        }
+
         if(typeof this.configuration.errorHandler === 'function') {
           return handle.pipe(catchError(err => this.configuration.errorHandler(err, '{{operationIdOriginal}}')));
         }
@@ -387,6 +395,13 @@ export class {{classname}} {
             if(this.cancelMap['{{operationIdOriginal}}']) {
                 handle = handle.takeUntil(this.cancelMap['{{operationIdOriginal}}']);
             }
+        }
+
+        if(typeof this.configuration.beforeHandler === 'function') {
+          this.configuration.beforeHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
+        }
+        if(typeof this.configuration.afterHandler === 'function') {
+          handle = handle.tap(this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
         }
 
         if(typeof this.configuration.errorHandler === 'function') {
