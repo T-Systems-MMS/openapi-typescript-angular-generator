@@ -43,6 +43,15 @@ import { {{classname}}Interface }                            from './{{classFile
 {{/withInterfaces}}
 
 {{#operations}}
+
+export namespace {{classname}} {
+  export enum Operations {
+    {{#operation}}
+    {{operationIdOriginal}} = '{{operationIdOriginal}}'{{^-last}},{{/-last}}
+    {{/operation}}
+  }
+}
+
 {{>apiPartialMap}}
 
 {{#description}}
