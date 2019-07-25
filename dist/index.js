@@ -235,6 +235,7 @@ var TypedFormGroup = /** @class */ (function (_super) {
             var control = _this.get((contextPath ? contextPath + "." + path : path));
             if (control) {
                 // enables showing errors in view
+                control.enable();
                 control.markAsTouched();
                 control.setErrors(errors[path]);
             }

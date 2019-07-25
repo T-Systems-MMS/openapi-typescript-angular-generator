@@ -122,6 +122,7 @@ export class TypedFormGroup<T> extends FormGroup {
       const control = this.get(<Extract<keyof T, string>>(contextPath ? `${contextPath}.${path}` : path));
       if (control) {
         // enables showing errors in view
+        control.enable();
         control.markAsTouched();
         control.setErrors(errors[path]);
       }

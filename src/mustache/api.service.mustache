@@ -24,11 +24,12 @@ import { Subject }                                           from 'rxjs/Subject'
 {{/useRxJS6}}
 {{#useRxJS6}}
 import { Observable, Subject }                               from 'rxjs';
-import { catchError, takeUntil }                             from 'rxjs/operators';
+import { catchError, takeUntil, tap }                        from 'rxjs/operators';
 {{/useRxJS6}}
 {{^useHttpClient}}
 import '../rxjs-operators';
 import 'rxjs/add/operator/takeUntil';
+import 'rxjs/add/operator/tap';
 {{/useHttpClient}}
 
 {{#imports}}
@@ -347,7 +348,17 @@ export class {{classname}} {
             }
         }
 
-        if(typeof this.configuration.errorHandler === 'function') {
+        if (typeof this.configuration.beforeHandler === 'function') {
+          this.configuration.beforeHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
+        }
+        if (typeof this.configuration.afterHandler === 'function') {
+          handle = handle.pipe(tap(
+            result => this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase(), result),
+            err => this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase(), err)
+          ));
+        }
+
+        if (typeof this.configuration.errorHandler === 'function') {
           return handle.pipe(catchError(err => this.configuration.errorHandler(err, '{{operationIdOriginal}}')));
         }
         return handle;
@@ -389,7 +400,17 @@ export class {{classname}} {
             }
         }
 
-        if(typeof this.configuration.errorHandler === 'function') {
+        if (typeof this.configuration.beforeHandler === 'function') {
+          this.configuration.beforeHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
+        }
+        if (typeof this.configuration.afterHandler === 'function') {
+          handle = handle.tap(
+            result => this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase(), result),
+            err => this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase(), err)
+          );
+        }
+
+        if (typeof this.configuration.errorHandler === 'function') {
           return handle.catch(err => this.configuration.errorHandler(err, '{{operationIdOriginal}}'));
         }
         return handle;
@@ -397,4 +418,12 @@ export class {{classname}} {
     }
 
 {{/operation}}}
+
+export namespace {{classname}} {
+  export enum Operations {
+    {{#operation}}
+    {{operationIdOriginal}} = '{{operationIdOriginal}}'{{^-last}},{{/-last}}
+    {{/operation}}
+  }
+}
 {{/operations}}
