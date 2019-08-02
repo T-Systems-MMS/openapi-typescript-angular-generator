@@ -353,7 +353,7 @@ export class {{classname}} {
           this.configuration.beforeHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
         }
         const afterHandler = (result: any, stopCancellation = true) => {
-          // stop cancelation to prevent calling afterHandler on next service call
+          // stop cancellation to prevent calling afterHandler on next service call
           if (stopCancellation && cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
             this.cancelMap['{{operationIdOriginal}}'].complete();
             delete this.cancelMap['{{operationIdOriginal}}'];
@@ -413,7 +413,7 @@ export class {{classname}} {
           this.configuration.beforeHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
         }
         const afterHandler = (result: any, stopCancellation = true) => {
-          // stop cancelation to prevent calling afterHandler on next service call
+          // stop cancellation to prevent calling afterHandler on next service call
           if (stopCancellation && cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
             this.cancelMap['{{operationIdOriginal}}'].complete();
             delete this.cancelMap['{{operationIdOriginal}}'];
