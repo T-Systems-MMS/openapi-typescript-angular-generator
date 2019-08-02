@@ -360,7 +360,7 @@ export class {{classname}} {
             }
             this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase(), result);
           };
-          handle = handle.pipe(tap(afterHandler, afterHandler)));
+          handle = handle.pipe(tap(afterHandler, afterHandler));
           if (cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
             this.cancelMap['{{operationIdOriginal}}'].asObservable().subscribe(() => afterHandler(new Error('CANCELLED'), false));
           }
