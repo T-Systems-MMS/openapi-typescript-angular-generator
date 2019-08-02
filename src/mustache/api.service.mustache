@@ -352,9 +352,9 @@ export class {{classname}} {
         if (typeof this.configuration.beforeHandler === 'function') {
           this.configuration.beforeHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
         }
-        const afterHandler = (result: any, stopCancellation = true) => {
+        const afterHandler = (result: any) => {
           // stop cancellation to prevent calling afterHandler on next service call
-          if (stopCancellation && cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
+          if (cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
             this.cancelMap['{{operationIdOriginal}}'].complete();
             delete this.cancelMap['{{operationIdOriginal}}'];
           }
@@ -364,7 +364,10 @@ export class {{classname}} {
         };
         handle = handle.pipe(tap(afterHandler, afterHandler));
         if (typeof this.configuration.afterHandler === 'function' && cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
-          this.cancelMap['{{operationIdOriginal}}'].asObservable().pipe(take(1)).subscribe(() => afterHandler(new Error('CANCELLED'), false));
+          this.cancelMap['{{operationIdOriginal}}']
+            .asObservable()
+            .pipe(take(1))
+            .subscribe(() => this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase(), new Error('CANCELLED')));
         }
 
         if (typeof this.configuration.errorHandler === 'function') {
@@ -412,9 +415,9 @@ export class {{classname}} {
         if (typeof this.configuration.beforeHandler === 'function') {
           this.configuration.beforeHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
         }
-        const afterHandler = (result: any, stopCancellation = true) => {
+        const afterHandler = (result: any) => {
           // stop cancellation to prevent calling afterHandler on next service call
-          if (stopCancellation && cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
+          if (cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
             this.cancelMap['{{operationIdOriginal}}'].complete();
             delete this.cancelMap['{{operationIdOriginal}}'];
           }
@@ -424,7 +427,10 @@ export class {{classname}} {
         };
         handle = handle.tap(afterHandler, afterHandler);
         if (typeof this.configuration.afterHandler === 'function' && cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
-          this.cancelMap['{{operationIdOriginal}}'].asObservable().take(1).subscribe(() => afterHandler(new Error('CANCELLED'), false));
+          this.cancelMap['{{operationIdOriginal}}']
+            .asObservable()
+            .take(1)
+            .subscribe(() => this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase(), new Error('CANCELLED')));
         }
 
         if (typeof this.configuration.errorHandler === 'function') {
