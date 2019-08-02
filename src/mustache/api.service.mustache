@@ -21,9 +21,10 @@ import { CustomQueryEncoderHelper }                          from '../encoder';
 {{^useRxJS6}}
 import { Observable }                                        from 'rxjs/Observable';
 import { Subject }                                           from 'rxjs/Subject';
+import { Subscription }                                      from 'rxjs/Subscription';
 {{/useRxJS6}}
 {{#useRxJS6}}
-import { Observable, Subject }                               from 'rxjs';
+import { Observable, Subject, Subscription }                 from 'rxjs';
 import { catchError, takeUntil, tap, share }                 from 'rxjs/operators';
 {{/useRxJS6}}
 {{^useHttpClient}}
@@ -351,7 +352,7 @@ export class {{classname}} {
           this.configuration.beforeHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
         }
         let afterSubscription: Subscription;
-        const afterHandler = (result: any) => {
+        const afterHandler = (result: any = null) => {
           if (afterSubscription) {
             afterSubscription.unsubscribe();
           }
@@ -373,7 +374,7 @@ export class {{classname}} {
           result => afterHandler(result),
           err => afterHandler(err),
           () => afterHandler()
-        )
+        );
 
         if (typeof this.configuration.errorHandler === 'function') {
           return handle.pipe(catchError(err => this.configuration.errorHandler(err, '{{operationIdOriginal}}')));
@@ -421,7 +422,7 @@ export class {{classname}} {
           this.configuration.beforeHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
         }
         let afterSubscription: Subscription;
-        const afterHandler = (result: any) => {
+        const afterHandler = (result: any = null) => {
           if (afterSubscription) {
             afterSubscription.unsubscribe();
           }
@@ -443,7 +444,7 @@ export class {{classname}} {
           result => afterHandler(result),
           err => afterHandler(err),
           () => afterHandler()
-        )
+        );
 
         if (typeof this.configuration.errorHandler === 'function') {
           return handle.catch(err => this.configuration.errorHandler(err, '{{operationIdOriginal}}'));
