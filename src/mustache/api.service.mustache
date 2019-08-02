@@ -24,12 +24,13 @@ import { Subject }                                           from 'rxjs/Subject'
 {{/useRxJS6}}
 {{#useRxJS6}}
 import { Observable, Subject }                               from 'rxjs';
-import { catchError, takeUntil, tap }                        from 'rxjs/operators';
+import { catchError, takeUntil, tap, take }                  from 'rxjs/operators';
 {{/useRxJS6}}
 {{^useHttpClient}}
 import '../rxjs-operators';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/tap';
+import 'rxjs/add/operator/take';
 {{/useHttpClient}}
 
 {{#imports}}
@@ -340,7 +341,7 @@ export class {{classname}} {
             if (this.cancelMap['{{operationIdOriginal}}']) {
                 this.cancelMap['{{operationIdOriginal}}'].next();
                 this.cancelMap['{{operationIdOriginal}}'].complete();
-                this.cancelMap['{{operationIdOriginal}}'] = null;
+                delete this.cancelMap['{{operationIdOriginal}}'];
             }
             this.cancelMap['{{operationIdOriginal}}'] = '{{httpMethod}}'.toUpperCase() === 'GET' ? new Subject<any>() : null;
             if(this.cancelMap['{{operationIdOriginal}}']) {
@@ -351,19 +352,19 @@ export class {{classname}} {
         if (typeof this.configuration.beforeHandler === 'function') {
           this.configuration.beforeHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
         }
-        if (typeof this.configuration.afterHandler === 'function') {
-          const afterHandler = (result: any, stopCancellation = true) => {
-            if (stopCancellation && cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
-              // don't call next to prevent second call
-              this.cancelMap['{{operationIdOriginal}}'].complete();
-              this.cancelMap['{{operationIdOriginal}}'] = null;
-            }
-            this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase(), result);
-          };
-          handle = handle.pipe(tap(afterHandler, afterHandler));
-          if (cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
-            this.cancelMap['{{operationIdOriginal}}'].asObservable().subscribe(() => afterHandler(new Error('CANCELLED'), false));
+        const afterHandler = (result: any, stopCancellation = true) => {
+          // stop cancelation to prevent calling afterHandler on next service call
+          if (stopCancellation && cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
+            this.cancelMap['{{operationIdOriginal}}'].complete();
+            delete this.cancelMap['{{operationIdOriginal}}'];
           }
+          if (typeof this.configuration.afterHandler === 'function') {
+            this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase(), result);
+          }
+        };
+        handle = handle.pipe(tap(afterHandler, afterHandler));
+        if (typeof this.configuration.afterHandler === 'function' && cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
+          this.cancelMap['{{operationIdOriginal}}'].asObservable().pipe(take(1)).subscribe(() => afterHandler(new Error('CANCELLED'), false));
         }
 
         if (typeof this.configuration.errorHandler === 'function') {
@@ -400,7 +401,7 @@ export class {{classname}} {
             if (this.cancelMap['{{operationIdOriginal}}']) {
                 this.cancelMap['{{operationIdOriginal}}'].next();
                 this.cancelMap['{{operationIdOriginal}}'].complete();
-                this.cancelMap['{{operationIdOriginal}}'] = null;
+                delete this.cancelMap['{{operationIdOriginal}}'];
             }
             this.cancelMap['{{operationIdOriginal}}'] = '{{httpMethod}}'.toUpperCase() === 'GET' ? new Subject<any>() : null;
             if(this.cancelMap['{{operationIdOriginal}}']) {
@@ -411,19 +412,19 @@ export class {{classname}} {
         if (typeof this.configuration.beforeHandler === 'function') {
           this.configuration.beforeHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase());
         }
-        if (typeof this.configuration.afterHandler === 'function') {
-          const afterHandler = (result: any, stopCancellation = true) => {
-            if (stopCancellation && cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
-              // don't call next to prevent second call
-              this.cancelMap['{{operationIdOriginal}}'].complete();
-              this.cancelMap['{{operationIdOriginal}}'] = null;
-            }
-            this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase(), result);
-          };
-          handle = handle.tap(afterHandler, afterHandler);
-          if (cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
-            this.cancelMap['{{operationIdOriginal}}'].asObservable().subscribe(() => afterHandler(new Error('CANCELLED'), false));
+        const afterHandler = (result: any, stopCancellation = true) => {
+          // stop cancelation to prevent calling afterHandler on next service call
+          if (stopCancellation && cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
+            this.cancelMap['{{operationIdOriginal}}'].complete();
+            delete this.cancelMap['{{operationIdOriginal}}'];
           }
+          if (typeof this.configuration.afterHandler === 'function') {
+            this.configuration.afterHandler('{{operationIdOriginal}}', '{{httpMethod}}'.toUpperCase(), result);
+          }
+        };
+        handle = handle.tap(afterHandler, afterHandler);
+        if (typeof this.configuration.afterHandler === 'function' && cancelPreviousRequest && this.cancelMap['{{operationIdOriginal}}']) {
+          this.cancelMap['{{operationIdOriginal}}'].asObservable().take(1).subscribe(() => afterHandler(new Error('CANCELLED'), false));
         }
 
         if (typeof this.configuration.errorHandler === 'function') {
