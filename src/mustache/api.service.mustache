@@ -409,8 +409,6 @@ export class {{classname}} {
         if (cancelPreviousRequest) {
             if (this.cancelMap['{{operationIdOriginal}}']) {
                 this.cancelMap['{{operationIdOriginal}}'].next();
-                this.cancelMap['{{operationIdOriginal}}'].complete();
-                delete this.cancelMap['{{operationIdOriginal}}'];
             }
             this.cancelMap['{{operationIdOriginal}}'] = '{{httpMethod}}'.toUpperCase() === 'GET' ? new Subject<any>() : null;
             if(this.cancelMap['{{operationIdOriginal}}']) {
