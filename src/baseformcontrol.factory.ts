@@ -12,7 +12,7 @@ import { TypedFormControl, TypedControlOptions } from './formcontrol';
  * Main purpose of this factory is to provide an easy way of creating form-controls with the correct validators.
  * The factory also ensures that model and validator match one another.
  */
-export class BaseFormControlFactory<T> {
+export class BaseFormControlFactory<T extends Object> {
   private map: Map<keyof T, { value: any; validators: [string, ValidatorFn][] }>;
 
   /**
