@@ -1,6 +1,6 @@
 {
   "name": "openapi-typescript-angular-generator",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "Code generator to generate angular-specific typescript (model/service/validator) from an openapi-specification.",
   "repository": {
     "type": "git",
