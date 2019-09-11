@@ -7,7 +7,7 @@
     "url": "https://github.com/T-Systems-MMS/openapi-typescript-angular-generator.git"
   },
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c && rollup -c rollup-es2015.config.js",
     "test": "jest --config jest.config.js",
     "prepare": "npm run build",
     "prepublishOnly": "npm test"
@@ -17,8 +17,9 @@
     "src/mustache",
     "bin"
   ],
+  "es2015": "dist/index.es2015.js",
   "main": "dist/index.js",
-  "module": "dist/index.es.js",
+  "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "bin": "bin/ng-ts-codegen.js",
   "dependencies": {
