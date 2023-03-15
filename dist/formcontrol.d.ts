@@ -1,4 +1,4 @@
-import { FormControl, ValidatorFn, AsyncValidatorFn } from '@angular/forms';
+import { FormControl, ValidatorFn, AsyncValidatorFn, FormControlStatus } from '@angular/forms';
 import { Observable } from 'rxjs';
 /**
  * Validator options to have mapping key -> validator function.
@@ -23,7 +23,7 @@ export declare class TypedFormControl<T> extends FormControl {
     /** @inheritdoc */
     readonly valueChanges: Observable<T>;
     /** @inheritdoc */
-    readonly statusChanges: Observable<T>;
+    readonly statusChanges: Observable<FormControlStatus>;
     /** holds all possible validator names extracted by the given validators */
     readonly registeredValidators: string[];
     /** @inheritdoc */
