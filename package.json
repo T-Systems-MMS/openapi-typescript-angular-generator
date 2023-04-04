@@ -1,6 +1,6 @@
 {
   "name": "openapi-typescript-angular-generator",
-  "version": "10.0.0",
+  "version": "13.0.0",
   "description": "Code generator to generate angular-specific typescript (model/service/validator) from an openapi-specification.",
   "repository": {
     "type": "git",
@@ -33,24 +33,25 @@
   ],
   "contributors": [
     "André Jähnig",
-    "Stefan Schubert"
+    "Stefan Schubert",
+    "Christof Hahn"
   ],
   "license": "Apache-2.0",
   "peerDependencies": {
-    "@angular/forms": ">=10.0.0"
+    "@angular/forms": ">=13.0.0"
   },
   "devDependencies": {
-    "@angular/common": "^10.0.0",
-    "@angular/core": "^10.0.0",
-    "@angular/forms": "^10.0.0",
-    "@angular/platform-browser": "^10.0.0",
-    "@types/jest": "^24.0.15",
-    "jest": "^24.8.0",
+    "@angular/common": "^13.0.0",
+    "@angular/core": "^13.0.0",
+    "@angular/forms": "^13.0.0",
+    "@angular/platform-browser": "^13.0.0",
+    "@types/jest": "^29.5.0",
+    "jest": "^29.5.0",
     "rollup": "^1.17.0",
     "rollup-plugin-typescript2": "^0.24.0",
     "rxjs": "^6.5.3",
-    "ts-jest": "^24.0.2",
-    "typescript": "3.5.3",
+    "ts-jest": "^29.1.0",
+    "typescript": "4.6.4",
     "zone.js": "~0.10.3"
   }
 }
