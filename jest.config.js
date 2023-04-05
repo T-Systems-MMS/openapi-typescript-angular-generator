@@ -1,11 +1,5 @@
-const {
-  defaults
-} = require('jest-config');
-
 module.exports = {
-  transform: {
-    '^.+\\.ts$': 'ts-jest'
-  },
-  testRegex: "^.+\\.spec\\.ts$",
-  moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts'],
-}
+  preset: 'jest-preset-angular',
+  setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
+  globalSetup: 'jest-preset-angular/global-setup',
+};

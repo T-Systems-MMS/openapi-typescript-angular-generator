@@ -1,4 +1,4 @@
-import { FormControl, ValidatorFn, AsyncValidatorFn, FormControlStatus } from '@angular/forms';
+import { FormControl, ValidatorFn, AsyncValidatorFn, FormControlStatus, FormControlState } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 /**
@@ -20,7 +20,7 @@ export interface TypedControlOptions extends ValidatorOptions {
 }
 
 /** @inheritdoc */
-export class TypedFormControl<T> extends FormControl {
+export class TypedFormControl<T = any> extends FormControl {
   /** @inheritdoc */
   readonly value: T;
   /** @inheritdoc */
@@ -31,7 +31,7 @@ export class TypedFormControl<T> extends FormControl {
   readonly registeredValidators: string[];
 
   /** @inheritdoc */
-  constructor(formState?: T, opts?: TypedControlOptions) {
+  constructor(formState?: FormControlState<T> | T, opts?: TypedControlOptions) {
     super(formState, {
       validators: opts ? opts.validators.map(validator => validator && validator[1]) : null,
       asyncValidators:

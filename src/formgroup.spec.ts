@@ -30,15 +30,15 @@ test('Test FormGroupControl creation #1', () => {
     ['deepValue', { validators: [['req', Validators.required]], value: 'deepTestValue' }],
   ]);
 
-  const control = factory.createFormControl('value');
+  const control = factory.createFormControl<TestType>('value');
   expect(control.registeredValidators).toEqual(['req']);
 
-  const valueControl = factory.createFormControl('value');
-  const nestedControl = nestedFactory.createFormControl('deepValue');
-  const nestedGroup = new TypedFormGroup<NestedType>({
+  const valueControl = factory.createFormControl<TestType>('value');
+  const nestedControl = nestedFactory.createFormControl<NestedType>('deepValue');
+  const nestedGroup = new TypedFormGroup({
     deepValue: nestedControl,
   });
-  const group = new TypedFormGroup<TestType>({
+  const group = new TypedFormGroup({
     nested: nestedGroup,
     value: valueControl,
   });
@@ -49,7 +49,7 @@ test('Test FormGroupControl creation #1', () => {
   valueControl.setErrors({ req: 'Is Required!', other: 'Other Error!' });
   nestedControl.setErrors({ req: 'Is Required!' });
 
-  expect(group.parent).toBeUndefined();
+  expect(group.parent).toBeNull();
   expect(valueControl.parent).toEqual(group);
   expect(nestedControl.parent).toEqual(nestedGroup);
 
@@ -74,7 +74,7 @@ test('Test FormGroupControl creation #2', () => {
   );
 
   const nestedControl = nestedFactory.createFormControl('deepValue');
-  const nestedGroup = new TypedFormGroup<NestedType>({
+  const nestedGroup = new TypedFormGroup({
     deepValue: nestedControl,
   });
 

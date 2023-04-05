@@ -52,6 +52,6 @@ export class BaseFormControlFactory<T extends Object> {
         updateOn: controlOpts ? controlOpts.updateOn : undefined,
       });
     }
-    return new TypedFormControl();
+    return new TypedFormControl<K>();
   }
 }

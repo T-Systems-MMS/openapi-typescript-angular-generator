@@ -5,6 +5,7 @@ import {
   FormGroup,
   ValidatorFn,
   ValidationErrors,
+  ɵFormGroupValue,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { TypedFormControl } from './formcontrol';
@@ -12,17 +13,16 @@ import { TypedFormControl } from './formcontrol';
 /**
  * Typed FormGroup.
  */
-export class TypedFormGroup<T> extends FormGroup {
-  /** @inheritdoc */
-  readonly value: T;
-  /** @inheritdoc */
-  readonly valueChanges: Observable<T>;
+export class TypedFormGroup<T extends {
+  [K in keyof T]: AbstractControl<any>;
+} = any> extends FormGroup<T> {
+
   /** holds a map with control names to possible validator names */
   readonly registeredValidatorsMap: { [controlName in keyof T]: string[] };
 
   /** @inheritdoc */
   constructor(
-    controls: { [key in keyof T]: AbstractControl },
+    controls: T,
     validatorOrOpts?: ValidatorFn | Array<ValidatorFn> | AbstractControlOptions | null,
     asyncValidator?: AsyncValidatorFn | Array<AsyncValidatorFn> | null
   ) {
@@ -42,7 +42,7 @@ export class TypedFormGroup<T> extends FormGroup {
   }
 
   /** @inheritdoc */
-  patchValue(value: Partial<T> | T, options?: { onlySelf?: boolean; emitEvent?: boolean }): void {
+  patchValue(value: ɵFormGroupValue<T>, options?: { onlySelf?: boolean; emitEvent?: boolean }): void {
     super.patchValue(value, options);
   }
 
@@ -56,7 +56,7 @@ export class TypedFormGroup<T> extends FormGroup {
    *
    * @param path path to group
    */
-  getNestedGroup<K>(path: Extract<keyof T, string>): TypedFormGroup<K> | null {
+  getNestedGroup<K>(path: Extract<keyof T, string>): TypedFormGroup | null {
     const control = this.get(path);
     if (control instanceof TypedFormGroup) {
       return control;
