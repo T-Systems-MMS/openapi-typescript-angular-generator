@@ -12,7 +12,7 @@ const { exec } = require('child_process');
 const { resolve } = require('path');
 const url = require('url');
 
-const openApiVersion = '3.3.4';
+const openApiVersion = '4.1.3';
 const jarFileName = `openapi-generator-cli-${openApiVersion}.jar`;
 const dockerImageName = `openapitools/openapi-generator-cli:v${openApiVersion}`;
 
